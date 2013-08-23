@@ -12,10 +12,12 @@ final class CodeJam {
 		int caseCount;
 		try {
 			caseCount = Integer.parseInt(reader.readLine());
+			System.err.println(String.format("caseCount=%s", caseCount));
 		} catch (Exception e) {
 			throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
 		}
 		for (int caseNum = 0; caseNum < caseCount; caseNum++) {
+			System.err.println(String.format("caseNum=%s", caseNum));
 			String solution;
 			try {
 				solution = strategy.execute(reader);
