@@ -40,6 +40,7 @@ public class Milkshakes {
 		samples.add(buildSample0());
 		samples.add(buildSample1());
 		samples.add(buildSample2());
+		samples.add(buildSample3());
 		for (Sample sample : samples) {
 			BitSet actual = findLeastMaltedCustomerSatisfyingSolution(sample.size, sample.customers);
 			if ((actual == null && sample.expected != null) || (actual != null && !actual.equals(sample.expected))) {
@@ -116,7 +117,7 @@ public class Milkshakes {
 		int customerCount = 3;
 		List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
 		customers.add(Arrays.asList(new Flavor(0, true)));
-		customers.add(Arrays.asList(new Flavor(0, false), new Flavor(2, false)));
+		customers.add(Arrays.asList(new Flavor(0, false), new Flavor(1, false)));
 		customers.add(Arrays.asList(new Flavor(4, false)));
 		BitSet expected = new BitSet(size);
 		expected.set(0);
@@ -159,6 +160,33 @@ public class Milkshakes {
 		BitSet expected = new BitSet(size);
 		expected.set(0);
 		return new Sample(size, customers, expected);
+	}
+
+	/**
+	 * This is the case that isn't allowed by the problem statement (each customer can only request one malted flavor).
+	 * This implementation works for this case, but as stated earlier doesn't scale.
+	 */
+	private static Sample buildSample3() {
+		// Input:
+		//   5
+		//   3
+		//   1 2 1 5 1
+		//   2 1 0 2 0
+		//   1 5 0
+		//
+		// Expected:
+		//   0 1 0 0 0
+		//
+		int size = 5;
+		int customerCount = 3;
+		List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
+		customers.add(Arrays.asList(new Flavor(1, true), new Flavor(4, true)));
+		customers.add(Arrays.asList(new Flavor(0, false), new Flavor(1, false)));
+		customers.add(Arrays.asList(new Flavor(4, false)));
+		BitSet expected = new BitSet(size);
+		expected.set(1);
+		return new Sample(size, customers, expected);
+
 	}
 
 	/**
