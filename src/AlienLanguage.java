@@ -9,6 +9,37 @@ import java.util.Set;
 
 /**
  * https://code.google.com/codejam/contest/90101/dashboard
+ * 
+ * For the sample dictionary (abc, bca, dac, dbc, cba) this implementation builds up the following data structure:
+ * 
+ *   [0: {a: [abc],
+ *        b: [bca],
+ *        c: [cba],
+ *        d: [dac, dbc],
+ *        e: [],
+ *        ...
+ *        z: []
+ *        },
+ *   
+ *    1: {a: [dac],
+ *        b: [abc, cba, dbc],
+ *        c: [bca],
+ *        d: [],
+ *        e: [],
+ *        ...
+ *        z: []
+ *        },
+ *   
+ *    2: {a: [bca, cba],
+ *        b: [],
+ *        c: [dac, abc, dbc],
+ *        d: [],
+ *        e: [],
+ *        ...
+ *        z: []
+ *        }
+ *        
+ * Then does set intersection starting with all words in the dictionary and iterating over each token in the pattern.
  */
 final class AlienLanguage {
 
