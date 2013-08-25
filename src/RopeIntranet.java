@@ -13,7 +13,7 @@ import java.util.Set;
  * the large data set. The content analysis offers a solution of comparing the
  * A and B endpoints of each pair of ropes one by one. This solution differs
  * from that slightly as it determines the size of the intersection of the set
- * where Aj<Ai and the set where Bj>Bi, and then does the opposite
+ * where Aj<Ai and the set where Bj>Bi for all j>i, and then does the opposite
  * (Aj>Ai and Bj<Bi). Summing up the sizes of all those sets, removing one rope
  * from the mix each time, gives the solution.
  */
