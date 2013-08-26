@@ -1,3 +1,5 @@
+package name.etapic.avery;
+
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -7,6 +9,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 class ShapeDrawer extends Frame {
+
+	private static final long serialVersionUID = 4719982395394873055L;
 
 	public static void main(String[] args) {
 		Frame frame = new ShapeDrawer();

@@ -1,3 +1,5 @@
+package name.etapic.complexity;
+
 public class SmartererFasterer implements Algorithm {
 
 	public String getName() {
@@ -6,7 +8,7 @@ public class SmartererFasterer implements Algorithm {
 
 	public int[] go(int[] source) {
 		int[] gtCounts = new int[source.length];
-		
+
 		// O(n^2)
 		for (int i = 0; i < source.length; i++) {
 			int left = source[i];
@@ -19,7 +21,7 @@ public class SmartererFasterer implements Algorithm {
 				}
 			}
 		}
-		
+
 		return gtCounts;
 	}
 }

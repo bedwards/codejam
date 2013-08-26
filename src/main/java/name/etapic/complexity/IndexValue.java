@@ -1,3 +1,5 @@
+package name.etapic.complexity;
+
 class IndexValue implements Comparable<IndexValue> {
 
 	final int index;

@@ -1,3 +1,5 @@
+package name.etapic.codejam;
+
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
