@@ -147,7 +147,9 @@ final class CodeJam {
 			BufferedWriter outWriter = null;
 			try {
 				inReader = getReader(problemName, datasetName, "in");
-				outWriter = new BufferedWriter(new FileWriter(File.createTempFile(problemName, datasetName)));
+				File outFile = File.createTempFile(problemName, "." + datasetName);
+				System.out.println(outFile.getAbsolutePath());
+				outWriter = new BufferedWriter(new FileWriter(outFile));
 				final XYSeries series = new XYSeries(datasetName);
 				for (Measurement measurement : processor.processDataset(datasetName, inReader, outWriter)) {
 					series.add(measurement.problemSize, measurement.runningTime);
