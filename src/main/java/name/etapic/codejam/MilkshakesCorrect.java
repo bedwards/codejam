@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import name.etapic.codejam.CodeJam.Solution;
+
 /**
  * For this one I "cheated" (this is practice mode) and peeked at the Content Analysis.
  *   https://code.google.com/codejam/contest/32016/dashboard#s=a&a=1
@@ -99,7 +101,12 @@ public class MilkshakesCorrect {
 		}
 		CodeJam.jam(new CodeJam.Strategy() {
 			@Override
-			public String execute(BufferedReader reader) throws Exception {
+			public String getProblemName() {
+				return "milkshakes";
+			}
+
+			@Override
+			public Solution execute(BufferedReader reader) throws Exception {
 				int flavorCount = Integer.parseInt(reader.readLine());
 				int customerCount = Integer.parseInt(reader.readLine());
 				System.err.println(String.format("flavorCount=%s, customerCount=%s", flavorCount, customerCount));
@@ -126,7 +133,7 @@ public class MilkshakesCorrect {
 					System.err.println(String.format("%s", customers[i]));
 				}
 				boolean[] batches = findLeastMaltedCustomerSatisfyingBatches(flavorCount, customers);
-				return render(batches);
+				return new Solution(render(batches), customerCount);
 			}
 		});
 	}

@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import name.etapic.codejam.CodeJam.Solution;
+
 /**
  * Problem Statement - https://code.google.com/codejam/contest/32016/dashboard#s=p1
  * Contest Analysis (Solution) - https://code.google.com/codejam/contest/dashboard?c=32016#s=a&a=1
@@ -52,7 +54,12 @@ public class Milkshakes {
 		}
 		CodeJam.jam(new CodeJam.Strategy() {
 			@Override
-			public String execute(BufferedReader reader) throws Exception {
+			public String getProblemName() {
+				return "milkshakes";
+			}
+
+			@Override
+			public Solution execute(BufferedReader reader) throws Exception {
 				int size = Integer.parseInt(reader.readLine());
 				int customerCount = Integer.parseInt(reader.readLine());
 				List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
@@ -66,7 +73,7 @@ public class Milkshakes {
 					}
 				}
 				BitSet b = findLeastMaltedCustomerSatisfyingSolution(size, customers);
-				return render(b, size);
+				return new Solution(render(b, size), customerCount);
 			}
 		});
 	}

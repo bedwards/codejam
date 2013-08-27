@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import name.etapic.codejam.CodeJam.Solution;
+
 /**
  * https://code.google.com/codejam/contest/619102/dashboard#s=p0
  * 
@@ -58,7 +60,12 @@ final class RopeIntranet {
 		}
 		CodeJam.jam(new CodeJam.Strategy() {
 			@Override
-			public String execute(BufferedReader reader) throws Exception {
+			public String getProblemName() {
+				return "rope_intranet";
+			}
+
+			@Override
+			public Solution execute(BufferedReader reader) throws Exception {
 				int N = Integer.parseInt(reader.readLine());
 				int[] A = new int[N];
 				int[] B = new int[N];
@@ -67,7 +74,8 @@ final class RopeIntranet {
 					A[i] = Integer.parseInt(ns[0]);
 					B[i] = Integer.parseInt(ns[1]);
 				}
-				return String.format("%s", findIntersectPointCount(A, B));
+				String text = String.format("%s", findIntersectPointCount(A, B));
+				return new Solution(text, N);
 			}
 		});
 	}

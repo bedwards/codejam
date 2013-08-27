@@ -18,9 +18,9 @@ final class ChartExample {
 
 	public static void main(final String[] args) {
 		final XYSeriesCollection dataset = new XYSeriesCollection();
-		final XYSeries data = new XYSeries("data");
+		final XYSeries data = new XYSeries("Series Key");
 		data.add(1, 1);
-		data.add(2, 2);
+		data.add(2, 3);
 		data.add(3, 2);
 		data.add(4, 1);
 		dataset.addSeries(data);

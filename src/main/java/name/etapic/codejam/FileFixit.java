@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import name.etapic.codejam.CodeJam.Solution;
+
 /**
  * https://code.google.com/codejam/contest/635101/dashboard#s=p0
  */
@@ -29,7 +31,12 @@ final class FileFixit {
 	public static void main(final String[] args) {
 		CodeJam.jam(new CodeJam.Strategy() {
 			@Override
-			public String execute(BufferedReader reader) throws Exception {
+			public String getProblemName() {
+				return "file_fixit";
+			}
+
+			@Override
+			public Solution execute(BufferedReader reader) throws Exception {
 				String[] NM = reader.readLine().split(" ");
 				int N = Integer.parseInt(NM[0]);
 				int M = Integer.parseInt(NM[1]);
@@ -50,7 +57,7 @@ final class FileFixit {
 						}
 					}
 				});
-				return String.format("%s", sum[0]);
+				return new Solution(String.format("%s", sum[0]), Math.max(N, M));
 			}
 		});
 	}
