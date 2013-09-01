@@ -1,0 +1,45 @@
+<problems>
+
+	<problem name="File Fix-it" package="filefixit"
+		url="https://code.google.com/codejam/contest/635101/dashboard#s=p0">
+		<solvers>
+			<solver className="FileFixit">
+				<dataset name="sample" />
+				<dataset name="small" />
+				<dataset name="large" />
+			</solver>
+		</solvers>
+	</problem>
+
+	<problem name="Rope Intranet" package="ropeintranet"
+		url="https://code.google.com/codejam/contest/619102/dashboard#s=p0">
+		<solvers>
+			<solver className="RopeIntranet">
+				<dataset name="sample" />
+				<dataset name="small" />
+				<dataset name="large" />
+			</solver>
+		</solvers>
+	</problem>
+
+	<problem name="Milkshakes" package="milkshakes"
+		url="https://code.google.com/codejam/contest/32016/dashboard#s=p1">
+		<solvers>
+			<solver className="Milkshakes">
+				<dataset name="sample" />
+				<dataset name="small" />
+				<dataset name="large" />
+			</solver>
+			<solver className="MilkshakesNPComplete">
+				<dataset name="sample" />
+				<dataset name="small" />
+				<dataset name="large" />
+			</solver>
+		</solvers>
+	</problem>
+
+	<!-- <problem name="Rotate" package="rotate" url="https://code.google.com/codejam/contest/544101/dashboard#s=p0"> 
+		<solvers> <solver className="Rotate"> <dataset name="sample" /> </solver> 
+		</solvers> </problem> -->
+
+</problems>

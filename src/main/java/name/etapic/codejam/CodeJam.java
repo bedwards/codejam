@@ -1,11 +1,10 @@
 package name.etapic.codejam;
 
-import static java.lang.System.err;
 import static java.lang.System.nanoTime;
-import static java.lang.System.out;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -33,45 +32,148 @@ final class CodeJam {
 
 	private static final long STRATEGY_TIMEOUT_SECONDS = 5;
 
-	static interface Strategy {
-		String getProblemName();
+	private final List<ProblemConfig> problemConfigs;
 
-		Solution execute(BufferedReader reader) throws Exception;
+	CodeJam(final List<ProblemConfig> problemConfigs) {
+		this.problemConfigs = problemConfigs;
 	}
 
-	static class Solution {
-		final String text;
-		final int problemSize;
-
-		Solution(final String text, final int problemSize) {
-			this.text = text;
-			this.problemSize = problemSize;
+	void execute() {
+		final String basePackageName = getClass().getPackage().getName();
+		final ExecutorService executor = Executors.newCachedThreadPool();
+		try {
+			for (ProblemConfig problemConfig : problemConfigs) {
+				System.out.println(problemConfig);
+				for (SolverConfig solverConfig : problemConfig.getSolverConfigs()) {
+					final Class<?> cls = Class.forName(String.format("%s.%s.%s", basePackageName,
+							problemConfig.getPackageName(), solverConfig.getClassName()));
+					final Class<? extends ProblemSolver> solverCls = (Class<? extends ProblemSolver>) cls
+							.asSubclass(ProblemSolver.class);
+					final ProblemSolver solver = solverCls.getConstructor().newInstance();
+					for (String datasetName : solverConfig.getDatasetNames()) {
+						final XYSeries series;
+						try {
+							series = solve(executor, solver, problemConfig.getPackageName(),
+									solverConfig.getClassName(), datasetName);
+						} catch (RuntimeException e) {
+							if (e.getCause() instanceof TimeoutException) {
+								continue;
+							} else {
+								throw e;
+							}
+						}
+						if (!datasetName.equals("sample")) {
+							renderGraph(solverConfig.getClassName(), series);
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
+		} finally {
+			executor.shutdown();
 		}
 	}
 
-	static class Measurement {
-		final String text;
-		final int problemSize;
-		final long runningTime;
+	private final static class Measurement {
+		private final String text;
+		private final int problemSize;
+		private final long runningTime;
 
 		Measurement(final Solution solution, final long runningTime) {
-			this.text = solution.text;
-			this.problemSize = solution.problemSize;
+			this.text = solution.getText();
+			this.problemSize = solution.getProblemSize();
 			this.runningTime = runningTime;
 		}
 	}
 
-	private static BufferedReader getReader(String directory, String dataset, String extension) {
-		String name = String.format("/%s/%s.%s", directory, dataset, extension);
-		return new BufferedReader(new InputStreamReader(CodeJam.class.getResourceAsStream(name)));
+	private static final XYSeries solve(final ExecutorService executor, final ProblemSolver solver,
+			final String packageName, final String solverClassName, final String datasetName) {
+		BufferedReader inReader = null;
+		BufferedWriter outWriter = null;
+		try {
+			inReader = new BufferedReader(new InputStreamReader(CodeJam.class.getResourceAsStream(String.format(
+					"%s/%s.in", packageName, datasetName))));
+			File outFile = File.createTempFile(packageName, "." + datasetName);
+			System.out.println(outFile.getAbsolutePath());
+			outWriter = new BufferedWriter(new FileWriter(outFile));
+			final XYSeries series = new XYSeries(datasetName);
+			for (Measurement measurement : processDataset(executor, solver, packageName, solverClassName, datasetName,
+					inReader, outWriter)) {
+				series.add(measurement.problemSize, measurement.runningTime);
+			}
+			return series;
+		} catch (Exception e) {
+			throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
+		} finally {
+			if (inReader != null) {
+				try {
+					inReader.close();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				} finally {
+					close(outWriter);
+				}
+			}
+			close(outWriter);
+		}
 	}
 
-	private static String[] readExpectedLines(final String problemName, final String dataset, final int caseCount) {
-		final BufferedReader reader = getReader(problemName, dataset, "expected");
+	private static List<Measurement> processDataset(final ExecutorService executor, final ProblemSolver solver,
+			final String packageName, final String solverClassName, final String datasetName,
+			final BufferedReader inReader, final BufferedWriter outWriter) throws Exception {
+		final int caseCount = Integer.parseInt(inReader.readLine());
+		System.out.println(String.format("caseCount=%s", caseCount));
+		final List<String> outLines = new ArrayList<String>(caseCount);
+		final List<Measurement> measurements = new ArrayList<Measurement>();
+		for (int caseNum = 0; caseNum < caseCount; caseNum++) {
+			System.out.println(String.format("caseNum=%s", caseNum));
+			Future<Measurement> future = executor.submit(new Callable<Measurement>() {
+				@Override
+				public Measurement call() throws Exception {
+					long startTime = nanoTime();
+					final Solution solution = solver.solve(inReader);
+					long runningTime = nanoTime() - startTime;
+					return new Measurement(solution, runningTime);
+				}
+			});
+			final Measurement measurement;
+			try {
+				measurement = future.get(STRATEGY_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+			} catch (TimeoutException e) {
+				System.err.println(String.format("Time out: %s.%s (%s dataset)", packageName, solverClassName,
+						datasetName));
+				future.cancel(true);
+				throw e;
+			}
+			measurements.add(measurement);
+			final String caseOutput = String.format("Case #%s: %s", caseNum + 1, measurement.text);
+			outLines.add(caseOutput);
+			System.out.println(caseOutput);
+			outWriter.write(caseOutput);
+			outWriter.newLine();
+		}
+
+		// check for correctness
+		final List<String> expectedLines = readExpectedLines(packageName, datasetName, caseCount);
+		for (int caseIndex = 0; caseIndex < caseCount; caseIndex++) {
+			if (!outLines.get(caseIndex).equals(expectedLines.get(caseIndex))) {
+				System.err.println(String.format("%s (%s dataset) Actual: '%s', Expected: '%s'", solverClassName,
+						datasetName, outLines.get(caseIndex), expectedLines.get(caseIndex)));
+				System.exit(1);
+			}
+		}
+		return measurements;
+	}
+
+	private static List<String> readExpectedLines(final String packageName, final String datasetName,
+			final int caseCount) {
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(CodeJam.class.getResourceAsStream(String
+				.format("%s/%s.expected", packageName, datasetName))));
 		try {
-			final String[] expectedLines = new String[caseCount];
+			final List<String> expectedLines = new ArrayList<String>(caseCount);
 			for (int caseNum = 0; caseNum < caseCount; caseNum++) {
-				expectedLines[caseNum] = reader.readLine();
+				expectedLines.add(reader.readLine());
 			}
 			return expectedLines;
 		} catch (IOException e) {
@@ -85,98 +187,24 @@ final class CodeJam {
 		}
 	}
 
-	private static final class DatasetProcessor {
-		private final ExecutorService executor = Executors.newCachedThreadPool();
-		private final Strategy strategy;
-
-		private DatasetProcessor(final Strategy strategy) {
-			this.strategy = strategy;
-		}
-
-		private List<Measurement> processDataset(final String datasetName, final BufferedReader inReader,
-				final BufferedWriter outWriter) throws Exception {
-			final int caseCount = Integer.parseInt(inReader.readLine());
-
-			out.println(String.format("caseCount=%s", caseCount));
-			final String[] outLines = new String[caseCount];
-			final List<Measurement> measurements = new ArrayList<Measurement>();
-			for (int caseNum = 0; caseNum < caseCount; caseNum++) {
-				out.println(String.format("caseNum=%s", caseNum));
-				Future<Measurement> future = executor.submit(new Callable<Measurement>() {
-					@Override
-					public Measurement call() throws Exception {
-						long startTime = nanoTime();
-						final Solution solution = strategy.execute(inReader);
-						long runningTime = nanoTime() - startTime;
-						return new Measurement(solution, runningTime);
-					}
-				});
-				try {
-					final Measurement measurement = future.get(STRATEGY_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-					measurements.add(measurement);
-					final String caseOutput = String.format("Case #%s: %s", caseNum + 1, measurement.text);
-					outLines[caseNum] = caseOutput;
-					out.println(caseOutput);
-					outWriter.write(caseOutput);
-					outWriter.newLine();
-				} catch (TimeoutException e) {
-					err.println(String.format("Time out: %s %s", strategy.getProblemName(), datasetName));
-					System.exit(1);
-				}
+	private static void close(final Closeable closeable) {
+		if (closeable != null) {
+			try {
+				closeable.close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
-
-			// check for correctness
-			final String[] expectedLines = readExpectedLines(strategy.getProblemName(), datasetName, caseCount);
-			for (int caseNum = 0; caseNum < caseCount; caseNum++) {
-				if (!outLines[caseNum].equals(expectedLines[caseNum])) {
-					err.println(String.format("%s Actual: '%s', Expected: '%s'", datasetName, outLines[caseNum],
-							expectedLines[caseNum]));
-					System.exit(1);
-				}
-			}
-			return measurements;
 		}
 	}
 
-	static void jam(final Strategy strategy) {
-		final String problemName = strategy.getProblemName();
-		final DatasetProcessor processor = new DatasetProcessor(strategy);
+	private static void renderGraph(final String solverClassName, final XYSeries series) {
 		final XYSeriesCollection dataset = new XYSeriesCollection();
-		for (String datasetName : new String[] { "sample", "small", "large" }) {
-			BufferedReader inReader = null;
-			BufferedWriter outWriter = null;
-			try {
-				inReader = getReader(problemName, datasetName, "in");
-				File outFile = File.createTempFile(problemName, "." + datasetName);
-				System.out.println(outFile.getAbsolutePath());
-				outWriter = new BufferedWriter(new FileWriter(outFile));
-				final XYSeries series = new XYSeries(datasetName);
-				for (Measurement measurement : processor.processDataset(datasetName, inReader, outWriter)) {
-					series.add(measurement.problemSize, measurement.runningTime);
-				}
-				dataset.addSeries(series);
-			} catch (Exception e) {
-				throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
-			} finally {
-				try {
-					inReader.close();
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				} finally {
-					if (outWriter != null) {
-						try {
-							outWriter.close();
-						} catch (IOException e) {
-							throw new RuntimeException(e);
-						}
-					}
-				}
-			}
-		}
+		dataset.addSeries(series);
+		final String title = String.format("%s (%s dataset)", solverClassName, series.getKey());
 		final boolean legend = true;
 		final boolean tooltips = true;
 		final boolean urls = false;
-		final JFreeChart chart = ChartFactory.createScatterPlot(problemName, "Problem Size (N)", "Running Time T(N)",
+		final JFreeChart chart = ChartFactory.createScatterPlot(title, "Problem Size (N)", "Running Time T(N)",
 				dataset, PlotOrientation.VERTICAL, legend, tooltips, urls);
 		final XYPlot plot = (XYPlot) chart.getPlot();
 		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();

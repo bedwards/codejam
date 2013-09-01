@@ -1,17 +1,16 @@
-package name.etapic.codejam;
+package name.etapic.codejam.milkshakes;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import name.etapic.codejam.CodeJam.Solution;
+import name.etapic.codejam.ProblemSolver;
+import name.etapic.codejam.Solution;
 
-/**
- * Problem Statement - https://code.google.com/codejam/contest/32016/dashboard#s=p1
+/** code.google.com/codejam/contest/32016/dashboard#s=p1
  * Contest Analysis (Solution) - https://code.google.com/codejam/contest/dashboard?c=32016#s=a&a=1
  * 
  * I did not notice this little nugget in the problem statement:
@@ -37,63 +36,24 @@ import name.etapic.codejam.CodeJam.Solution;
  * data set down to a few billion years. I'll save it and wait for faster hardware.
  * 
  */
-public class Milkshakes {
+public class MilkshakesNPComplete implements ProblemSolver {
 
-	public static void main(String[] args) {
-		List<Sample> samples = new ArrayList<Sample>();
-		samples.add(buildSample0());
-		samples.add(buildSample1());
-		samples.add(buildSample2());
-		samples.add(buildSample3());
-		for (Sample sample : samples) {
-			BitSet actual = findLeastMaltedCustomerSatisfyingSolution(sample.size, sample.customers);
-			if ((actual == null && sample.expected != null) || (actual != null && !actual.equals(sample.expected))) {
-				System.err.println(String.format("%s, actual=%s", sample, render(actual, sample.size)));
-				System.exit(1);
+	@Override
+	public Solution solve(BufferedReader reader) throws Exception {
+		int size = Integer.parseInt(reader.readLine());
+		int customerCount = Integer.parseInt(reader.readLine());
+		List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
+		for (int i = 0; i < customerCount; i++) {
+			customers.add(new ArrayList<Flavor>());
+			String[] flavorSpecs = reader.readLine().split(" ");
+			for (int j = 1; j < flavorSpecs.length; j += 2) {
+				int index = Integer.parseInt(flavorSpecs[j]) - 1;
+				boolean malted = flavorSpecs[j + 1].equals("1");
+				customers.get(i).add(new Flavor(index, malted));
 			}
 		}
-		CodeJam.jam(new CodeJam.Strategy() {
-			@Override
-			public String getProblemName() {
-				return "milkshakes";
-			}
-
-			@Override
-			public Solution execute(BufferedReader reader) throws Exception {
-				int size = Integer.parseInt(reader.readLine());
-				int customerCount = Integer.parseInt(reader.readLine());
-				List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
-				for (int i = 0; i < customerCount; i++) {
-					customers.add(new ArrayList<Flavor>());
-					String[] flavorSpecs = reader.readLine().split(" ");
-					for (int j = 1; j < flavorSpecs.length; j += 2) {
-						int index = Integer.parseInt(flavorSpecs[j]) - 1;
-						boolean malted = flavorSpecs[j + 1].equals("1");
-						customers.get(i).add(new Flavor(index, malted));
-					}
-				}
-				BitSet b = findLeastMaltedCustomerSatisfyingSolution(size, customers);
-				return new Solution(render(b, size), customerCount);
-			}
-		});
-	}
-
-	private static class Sample {
-
-		private final int size;
-		private final List<List<Flavor>> customers;
-		private final BitSet expected;
-
-		private Sample(final int size, final List<List<Flavor>> customers, final BitSet expected) {
-			this.size = size;
-			this.customers = customers;
-			this.expected = expected;
-		}
-
-		@Override
-		public String toString() {
-			return String.format("size=%s, customers=%s, expected=%s", size, customers, render(expected, size));
-		}
+		BitSet b = findLeastMaltedCustomerSatisfyingSolution(size, customers);
+		return new Solution(render(b, size), customerCount);
 	}
 
 	private static class Flavor {
@@ -109,93 +69,6 @@ public class Milkshakes {
 		public String toString() {
 			return String.format("index=%s, malted=%s", index, malted);
 		}
-	}
-
-	private static Sample buildSample0() {
-		// Input:
-		//   5
-		//   3
-		//   1 1 1
-		//   2 1 0 2 0
-		//   1 5 0
-		//
-		// Expected:
-		//   1 0 0 0 0
-		//
-		int size = 5;
-		int customerCount = 3;
-		List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
-		customers.add(Arrays.asList(new Flavor(0, true)));
-		customers.add(Arrays.asList(new Flavor(0, false), new Flavor(1, false)));
-		customers.add(Arrays.asList(new Flavor(4, false)));
-		BitSet expected = new BitSet(size);
-		expected.set(0);
-		return new Sample(size, customers, expected);
-	}
-
-	private static Sample buildSample1() {
-		// Input:
-		//   1
-		//   2
-		//   1 1 0
-		//   1 1 1
-		//
-		// Expected:
-		//   null
-		//
-		int customerCount = 2;
-		List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
-		customers.add(Arrays.asList(new Flavor(0, false)));
-		customers.add(Arrays.asList(new Flavor(0, true)));
-		return new Sample(1, customers, null);
-	}
-
-	private static Sample buildSample2() {
-		// Input:
-		//   1
-		//   3
-		//   1 1 1
-		//   1 1 1
-		//   1 1 1
-		//
-		// Expected:
-		//   1
-		int size = 1;
-		int customerCount = 3;
-		List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
-		customers.add(Arrays.asList(new Flavor(0, true)));
-		customers.add(Arrays.asList(new Flavor(0, true)));
-		customers.add(Arrays.asList(new Flavor(0, true)));
-		BitSet expected = new BitSet(size);
-		expected.set(0);
-		return new Sample(size, customers, expected);
-	}
-
-	/**
-	 * This is the case that isn't allowed by the problem statement (each customer can only request one malted flavor).
-	 * This implementation works for this case, but as stated earlier doesn't scale.
-	 */
-	private static Sample buildSample3() {
-		// Input:
-		//   5
-		//   3
-		//   1 2 1 5 1
-		//   2 1 0 2 0
-		//   1 5 0
-		//
-		// Expected:
-		//   0 1 0 0 0
-		//
-		int size = 5;
-		int customerCount = 3;
-		List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
-		customers.add(Arrays.asList(new Flavor(1, true), new Flavor(4, true)));
-		customers.add(Arrays.asList(new Flavor(0, false), new Flavor(1, false)));
-		customers.add(Arrays.asList(new Flavor(4, false)));
-		BitSet expected = new BitSet(size);
-		expected.set(1);
-		return new Sample(size, customers, expected);
-
 	}
 
 	/**
@@ -311,6 +184,9 @@ public class Milkshakes {
 	 * Find all BitSets of specified size and cardinality (number of bits set).
 	 */
 	private static void findBitSets(int size, int cardinality, BitSetStrategy strategy) {
+		if (Thread.currentThread().isInterrupted()) {
+			throw new RuntimeException("Timed out.");
+		}
 		if (size < cardinality) {
 			return;
 		}
