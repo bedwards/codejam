@@ -1,5 +1,35 @@
 <problems>
 
+    <problem name="Reverse Words" package="reversewords"
+        url="TODO: enter problem URL">
+        <solvers>
+            <solver className="ReverseWords">
+                <dataset name="small" />
+                <dataset name="large" />
+            </solver>
+        </solvers>
+    </problem>
+
+    <problem name="Store Credit" package="storecredit"
+        url="TODO: enter problem URL">
+        <solvers>
+            <solver className="StoreCredit">
+                <dataset name="small" />
+                <dataset name="large" />
+            </solver>
+        </solvers>
+    </problem>
+
+    <problem name="T9 Spelling" package="t9spelling"
+        url="TODO: enter problem URL">
+        <solvers>
+            <solver className="T9Spelling">
+                <dataset name="small" />
+                <dataset name="large" />
+            </solver>
+        </solvers>
+    </problem>
+
 	<problem name="File Fix-it" package="filefixit"
 		url="https://code.google.com/codejam/contest/635101/dashboard#s=p0">
 		<solvers>
