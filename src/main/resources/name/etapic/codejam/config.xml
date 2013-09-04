@@ -1,34 +1,34 @@
 <problems>
 
-    <problem name="Reverse Words" package="reversewords"
-        url="TODO: enter problem URL">
-        <solvers>
-            <solver className="ReverseWords">
-                <dataset name="small" />
-                <dataset name="large" />
-            </solver>
-        </solvers>
-    </problem>
+	<problem name="Reverse Words" package="reversewords"
+		url="https://code.google.com/codejam/contest/351101/dashboard#s=p1">
+		<solvers>
+			<solver className="ReverseWords">
+				<dataset name="small" />
+				<dataset name="large" />
+			</solver>
+		</solvers>
+	</problem>
 
-    <problem name="Store Credit" package="storecredit"
-        url="TODO: enter problem URL">
-        <solvers>
-            <solver className="StoreCredit">
-                <dataset name="small" />
-                <dataset name="large" />
-            </solver>
-        </solvers>
-    </problem>
+	<problem name="Store Credit" package="storecredit"
+		url="https://code.google.com/codejam/contest/351101/dashboard#s=p0">
+		<solvers>
+			<solver className="StoreCredit">
+				<dataset name="small" />
+				<dataset name="large" />
+			</solver>
+		</solvers>
+	</problem>
 
-    <problem name="T9 Spelling" package="t9spelling"
-        url="TODO: enter problem URL">
-        <solvers>
-            <solver className="T9Spelling">
-                <dataset name="small" />
-                <dataset name="large" />
-            </solver>
-        </solvers>
-    </problem>
+	<problem name="T9 Spelling" package="t9spelling"
+		url="https://code.google.com/codejam/contest/351101/dashboard#s=p2">
+		<solvers>
+			<solver className="T9Spelling">
+				<dataset name="small" />
+				<dataset name="large" />
+			</solver>
+		</solvers>
+	</problem>
 
 	<problem name="File Fix-it" package="filefixit"
 		url="https://code.google.com/codejam/contest/635101/dashboard#s=p0">
@@ -68,8 +68,15 @@
 		</solvers>
 	</problem>
 
-	<!-- <problem name="Rotate" package="rotate" url="https://code.google.com/codejam/contest/544101/dashboard#s=p0"> 
-		<solvers> <solver className="Rotate"> <dataset name="sample" /> </solver> 
-		</solvers> </problem> -->
+	<problem name="Rotate" package="rotate"
+		url="https://code.google.com/codejam/contest/544101/dashboard#s=p0">
+		<solvers>
+			<solver className="Rotate">
+				<dataset name="sample" />
+				<dataset name="small" />
+				<dataset name="large" />
+			</solver>
+		</solvers>
+	</problem>
 
 </problems>
