@@ -1,5 +1,16 @@
 <problems>
 
+    <problem name="All Your Base" package="allyourbase"
+             url="https://code.google.com/codejam/contest/189252/dashboard#s=p0">
+        <solvers>
+            <solver className="AllYourBase">
+                <dataset name="sample" />
+                <dataset name="small" />
+                <dataset name="large" />
+            </solver>
+        </solvers>
+    </problem>
+<!--
 	<problem name="Reverse Words" package="reversewords"
 		url="https://code.google.com/codejam/contest/351101/dashboard#s=p1">
 		<solvers>
@@ -78,5 +89,5 @@
 			</solver>
 		</solvers>
 	</problem>
-
+                  -->
 </problems>

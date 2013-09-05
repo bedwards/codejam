@@ -153,6 +153,7 @@ final class CodeJam {
 			outWriter.write(caseOutput);
 			outWriter.newLine();
 		}
+        outWriter.flush();
 
 		// check for correctness
 		final List<String> expectedLines = readExpectedLines(packageName, datasetName, caseCount);
