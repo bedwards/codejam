@@ -9,7 +9,7 @@ import name.etapic.codejam.Solution;
 
 public final class T9Spelling implements ProblemSolver {
 
-	private static final Map<Byte, String> keypressMap = new HashMap<Byte, String>();
+	private static final Map<Byte, String> keypressMap = new HashMap<>();
 
 	static {
 		keypressMap.put((byte) ' ', "0");

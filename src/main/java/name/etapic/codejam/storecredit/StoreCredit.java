@@ -12,7 +12,7 @@ public final class StoreCredit implements ProblemSolver {
 	public Solution solve(BufferedReader reader) throws Exception {
 		int credit = Integer.parseInt(reader.readLine());
 		int priceCount = Integer.parseInt(reader.readLine());
-		List<Integer> prices = new ArrayList<Integer>(priceCount);
+		List<Integer> prices = new ArrayList<>(priceCount);
 		for (String priceStr : reader.readLine().split(" ")) {
 			prices.add(Integer.parseInt(priceStr));
 		}

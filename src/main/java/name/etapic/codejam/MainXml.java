@@ -1,28 +1,27 @@
 package name.etapic.codejam;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 final class MainXml {
 
-	public static void main(final String[] args) throws Exception {
-		new MainXml("config.xml").execute();
-	}
+    private final String configFilename;
 
-	private final String configFilename;
+    private MainXml(final String configFilename) {
+        this.configFilename = configFilename;
+    }
 
-	private MainXml(final String configFilename) {
-		this.configFilename = configFilename;
-	}
+    public static void main(final String[] args) throws Exception {
+        new MainXml("config.xml").execute();
+    }
 
 	private void execute() throws Exception {
 		final List<ProblemConfig> problemConfigs = parseXmlFile(configFilename);
@@ -36,8 +35,8 @@ final class MainXml {
 		final Document doc = builder.parse(stream);
 		doc.getDocumentElement().normalize();
 		final NodeList problemNodes = doc.getElementsByTagName("problem");
-		final List<ProblemConfig> problemConfigs = new ArrayList<ProblemConfig>();
-		for (int i = 0; i < problemNodes.getLength(); i++) {
+        final List<ProblemConfig> problemConfigs = new ArrayList<>();
+        for (int i = 0; i < problemNodes.getLength(); i++) {
 			final Node problemNode = problemNodes.item(i);
 			if (problemNode.getNodeType() == Node.ELEMENT_NODE) {
 				final Element problemElem = (Element) problemNode;
@@ -53,15 +52,15 @@ final class MainXml {
 
 	private List<SolverConfig> parseSolverConfigs(final Element problemElem) {
 		final NodeList solverNodes = problemElem.getElementsByTagName("solver");
-		final List<SolverConfig> solverConfigs = new ArrayList<SolverConfig>();
-		for (int i = 0; i < solverNodes.getLength(); i++) {
+        final List<SolverConfig> solverConfigs = new ArrayList<>();
+        for (int i = 0; i < solverNodes.getLength(); i++) {
 			final Node solverNode = solverNodes.item(i);
 			if (solverNode.getNodeType() == Node.ELEMENT_NODE) {
 				final Element solverElem = (Element) solverNode;
 				final String className = solverElem.getAttribute("className");
 				final NodeList datasetNodes = solverElem.getElementsByTagName("dataset");
-				final List<String> datasetNames = new ArrayList<String>();
-				for (int j = 0; j < datasetNodes.getLength(); j++) {
+                final List<String> datasetNames = new ArrayList<>();
+                for (int j = 0; j < datasetNodes.getLength(); j++) {
 					final Node datasetNode = datasetNodes.item(j);
 					if (datasetNode.getNodeType() == Node.ELEMENT_NODE) {
 						final Element datasetElem = (Element) datasetNode;

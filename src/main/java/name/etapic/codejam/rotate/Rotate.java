@@ -20,9 +20,9 @@ public final class Rotate implements ProblemSolver {
 		final String[] NK = reader.readLine().split(" ");
 		final int N = Integer.parseInt(NK[0]);
 		final int K = Integer.parseInt(NK[1]);
-		List<LinkedList<Boolean>> rotated = new ArrayList<LinkedList<Boolean>>(N);
+		List<LinkedList<Boolean>> rotated = new ArrayList<>(N);
 		for (int i = 0; i < N; i++) {
-			final LinkedList<Boolean> row = new LinkedList<Boolean>();
+			final LinkedList<Boolean> row = new LinkedList<>();
 			byte[] bytes = reader.readLine().getBytes();
 
 			// TODO: N^2, is there a order-N algorithm?
@@ -45,7 +45,7 @@ public final class Rotate implements ProblemSolver {
 				rotated.add(row);
 			}
 		}
-		final Set<Boolean> winners = new HashSet<Boolean>();
+		final Set<Boolean> winners = new HashSet<>();
 		String text = "Neither";
 		for (int i = 0; i < rotated.size(); i++) {
 			final LinkedList<Boolean> row = rotated.get(i);

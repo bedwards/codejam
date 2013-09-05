@@ -34,7 +34,7 @@ public final class FileFixit implements ProblemSolver {
 		String[] NM = reader.readLine().split(" ");
 		int N = Integer.parseInt(NM[0]);
 		int M = Integer.parseInt(NM[1]);
-		final Set<List<String>> existing = new HashSet<List<String>>(N);
+		final Set<List<String>> existing = new HashSet<>(N);
 		processDirectories(N, reader, new Strategy() {
 			@Override
 			public void execute(List<String> slice) {

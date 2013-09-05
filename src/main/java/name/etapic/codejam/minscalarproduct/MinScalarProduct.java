@@ -16,8 +16,8 @@ public final class MinScalarProduct implements ProblemSolver {
 
     private static BigInteger findMinScalarProduct(List<Integer> v1, List<Integer> v2) {
         assert v1.size() == v2.size();
-        List<Integer> sorted1 = new ArrayList<Integer>(v1);
-        List<Integer> sorted2 = new ArrayList<Integer>(v2);
+        List<Integer> sorted1 = new ArrayList<>(v1);
+        List<Integer> sorted2 = new ArrayList<>(v2);
         Collections.sort(sorted1);
         Collections.sort(sorted2);
         BigInteger result = BigInteger.ZERO;
@@ -33,7 +33,7 @@ public final class MinScalarProduct implements ProblemSolver {
     @Override
     public Solution solve(final BufferedReader reader) throws Exception {
         final int N = Integer.parseInt(reader.readLine());
-        List<List<Integer>> vectors = new ArrayList<List<Integer>>(2);
+        List<List<Integer>> vectors = new ArrayList<>(2);
         for (int i = 0; i < 2; i++) {
             String[] ns = reader.readLine().split(" ");
             vectors.add(new ArrayList<Integer>(N));

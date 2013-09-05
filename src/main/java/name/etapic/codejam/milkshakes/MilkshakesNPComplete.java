@@ -42,7 +42,7 @@ public class MilkshakesNPComplete implements ProblemSolver {
 	public Solution solve(BufferedReader reader) throws Exception {
 		int size = Integer.parseInt(reader.readLine());
 		int customerCount = Integer.parseInt(reader.readLine());
-		List<List<Flavor>> customers = new ArrayList<List<Flavor>>(customerCount);
+		List<List<Flavor>> customers = new ArrayList<>(customerCount);
 		for (int i = 0; i < customerCount; i++) {
 			customers.add(new ArrayList<Flavor>());
 			String[] flavorSpecs = reader.readLine().split(" ");
@@ -119,7 +119,7 @@ public class MilkshakesNPComplete implements ProblemSolver {
 	}
 
 	private static class BitSetCacher implements BitSetStrategy {
-		final Set<BitSet> cache = new HashSet<BitSet>();
+		final Set<BitSet> cache = new HashSet<>();
 
 		@Override
 		public boolean execute(BitSet b) {

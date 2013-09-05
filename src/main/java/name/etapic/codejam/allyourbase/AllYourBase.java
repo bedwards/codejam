@@ -26,7 +26,7 @@ public final class AllYourBase implements ProblemSolver {
     @Override
     public Solution solve(final BufferedReader reader) throws Exception {
         final byte[] message = reader.readLine().getBytes();
-        final Map<Byte, String> map = new HashMap<Byte, String>();
+        final Map<Byte, String> map = new HashMap<>();
         for (byte b : message) {
             map.put(b, null);
         }

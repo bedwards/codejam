@@ -22,7 +22,7 @@ import name.etapic.codejam.Solution;
 public final class RopeIntranet implements ProblemSolver {
 
 	private static Set<Integer> findSet(int[] endpoints, int i, boolean lessThan) {
-		Set<Integer> set = new HashSet<Integer>(endpoints.length - i - 1);
+		Set<Integer> set = new HashSet<>(endpoints.length - i - 1);
 		for (int j = i + 1; j < endpoints.length; j++) {
 			if (endpoints[j] < endpoints[i] == lessThan) {
 				set.add(j);

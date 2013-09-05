@@ -11,6 +11,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -44,38 +45,39 @@ final class CodeJam {
                 series.add(measurement.problemSize, measurement.runningTime);
             }
             return series;
-        } catch (Exception e) {
-            throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
-		}
-	}
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private static List<Measurement> processDataset(final ExecutorService executor, final ProblemSolver solver,
                                                     final String packageName, final String solverClassName, final String datasetName,
-                                                    final BufferedReader inReader, final BufferedWriter outWriter) throws Exception {
-        final int caseCount = Integer.parseInt(inReader.readLine());
-        System.out.println(String.format("caseCount=%s", caseCount));
-        final List<String> outLines = new ArrayList<String>(caseCount);
-        final List<Measurement> measurements = new ArrayList<Measurement>();
-        for (int caseNum = 0; caseNum < caseCount; caseNum++) {
-            System.out.println(String.format("caseNum=%s", caseNum));
-            Future<Measurement> future = executor.submit(new Callable<Measurement>() {
-                @Override
-                public Measurement call() throws Exception {
-                    long startTime = nanoTime();
-                    final Solution solution = solver.solve(inReader);
-                    long runningTime = nanoTime() - startTime;
-                    return new Measurement(solution, runningTime);
+                                                    final BufferedReader inReader, final BufferedWriter outWriter) {
+        try {
+            final int caseCount = Integer.parseInt(inReader.readLine());
+            System.out.println(String.format("caseCount=%s", caseCount));
+            final List<String> outLines = new ArrayList<>(caseCount);
+            final List<Measurement> measurements = new ArrayList<>();
+            for (int caseNum = 0; caseNum < caseCount; caseNum++) {
+                System.out.println(String.format("caseNum=%s", caseNum));
+                Future<Measurement> future = executor.submit(new Callable<Measurement>() {
+                    @Override
+                    public Measurement call() throws Exception {
+                        long startTime = nanoTime();
+                        final Solution solution = solver.solve(inReader);
+                        long runningTime = nanoTime() - startTime;
+                        return new Measurement(solution, runningTime);
+                    }
+                });
+                final Measurement measurement;
+                try {
+                    measurement = future.get(STRATEGY_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+                } catch (TimeoutException e) {
+                    System.err.println(String.format("Time out: %s.%s (%s dataset)", packageName, solverClassName,
+                            datasetName));
+                    future.cancel(true);
+                    throw e;
                 }
-            });
-            final Measurement measurement;
-            try {
-                measurement = future.get(STRATEGY_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-            } catch (TimeoutException e) {
-                System.err.println(String.format("Time out: %s.%s (%s dataset)", packageName, solverClassName,
-                        datasetName));
-                future.cancel(true);
-                throw e;
-            }
             measurements.add(measurement);
             final String caseOutput = String.format("Case #%s: %s", caseNum + 1, measurement.text);
             outLines.add(caseOutput);
@@ -95,13 +97,16 @@ final class CodeJam {
             }
         }
         return measurements;
+        } catch (IOException | ExecutionException | InterruptedException | TimeoutException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static List<String> readExpectedLines(final String packageName, final String datasetName,
                                                   final int caseCount) {
         try (final BufferedReader reader = new BufferedReader(new InputStreamReader(CodeJam.class.getResourceAsStream(String
                 .format("%s/%s.expected", packageName, datasetName))));) {
-            final List<String> expectedLines = new ArrayList<String>(caseCount);
+            final List<String> expectedLines = new ArrayList<>(caseCount);
             for (int caseNum = 0; caseNum < caseCount; caseNum++) {
                 expectedLines.add(reader.readLine());
             }
@@ -151,8 +156,7 @@ final class CodeJam {
                 for (SolverConfig solverConfig : problemConfig.getSolverConfigs()) {
                     final Class<?> cls = Class.forName(String.format("%s.%s.%s", basePackageName,
                             problemConfig.getPackageName(), solverConfig.getClassName()));
-                    final Class<? extends ProblemSolver> solverCls = (Class<? extends ProblemSolver>) cls
-                            .asSubclass(ProblemSolver.class);
+                    final Class<? extends ProblemSolver> solverCls = cls.asSubclass(ProblemSolver.class);
                     final ProblemSolver solver = solverCls.getConstructor().newInstance();
                     for (String datasetName : solverConfig.getDatasetNames()) {
                         final XYSeries series;
@@ -172,8 +176,8 @@ final class CodeJam {
                     }
                 }
             }
-        } catch (Exception e) {
-            throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            throw new RuntimeException(e);
         } finally {
             executor.shutdown();
         }
