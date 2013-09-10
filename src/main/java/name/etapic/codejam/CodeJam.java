@@ -13,6 +13,7 @@ import org.jfree.ui.ApplicationFrame;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -58,8 +59,8 @@ final class CodeJam {
             System.out.println(String.format("caseCount=%s", caseCount));
             final List<String> outLines = new ArrayList<>(caseCount);
             final List<Measurement> measurements = new ArrayList<>();
-            for (int caseNum = 0; caseNum < caseCount; caseNum++) {
-                System.out.println(String.format("caseNum=%s", caseNum));
+            for (int caseIndex = 0; caseIndex < caseCount; caseIndex++) {
+                System.out.println(String.format("caseIndex=%s", caseIndex));
                 Future<Measurement> future = executor.submit(new Callable<Measurement>() {
                     @Override
                     public Measurement call() throws Exception {
@@ -79,8 +80,8 @@ final class CodeJam {
                     throw e;
                 }
             measurements.add(measurement);
-            final String caseOutput = String.format("Case #%s: %s", caseNum + 1, measurement.text);
-            outLines.add(caseOutput);
+                final String caseOutput = String.format("Case #%s: %s", caseIndex + 1, measurement.text);
+                outLines.add(caseOutput);
             System.out.println(caseOutput);
             outWriter.write(caseOutput);
             outWriter.newLine();
@@ -170,7 +171,7 @@ final class CodeJam {
                                 throw e;
                             }
                         }
-                        if (!datasetName.equals("sample")) {
+                        if (Arrays.asList("small", "large").contains(datasetName)) {
                             renderGraph(solverConfig.getClassName(), series);
                         }
                     }

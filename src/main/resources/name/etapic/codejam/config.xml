@@ -1,8 +1,25 @@
 <problems>
 
+    <problem name="Tic-Tac-Toe-Tomek" package="tictactoetomek"
+             url="https://code.google.com/codejam/contest/2270488/dashboard">
+        <solvers>
+            <solver className="TicTacToeTomek">
+                <dataset name="debug" />
+                <dataset name="sample" />
+                <dataset name="small" />
+                <dataset name="large" />
+            </solver>
+            <solver className="ContentAnalysis">
+                <dataset name="debug" />
+                <dataset name="sample" />
+                <dataset name="small" />
+                <dataset name="large" />
+            </solver>
+        </solvers>
+    </problem>
 
-    <problem name="" package="minscalarproduct"
-             url="">
+    <problem name="Minimum Scalar Product" package="minscalarproduct"
+             url="https://code.google.com/codejam/contest/32016/dashboard">
         <solvers>
             <solver className="MinScalarProduct">
                 <dataset name="sample" />

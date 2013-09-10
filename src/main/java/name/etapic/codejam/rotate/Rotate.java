@@ -24,8 +24,6 @@ public final class Rotate implements ProblemSolver {
 		for (int i = 0; i < N; i++) {
 			final LinkedList<Boolean> row = new LinkedList<>();
 			byte[] bytes = reader.readLine().getBytes();
-
-			// TODO: N^2, is there a order-N algorithm?
 			for (int j = 0; j < N; j++) {
 				switch (bytes[j]) {
 				case (byte) '.':
