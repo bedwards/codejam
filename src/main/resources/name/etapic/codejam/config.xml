@@ -1,5 +1,16 @@
 <problems>
 
+    <problem name="Lawnmower" package="lawnmower"
+             url="https://code.google.com/codejam/contest/2270488/dashboard#s=p1">
+        <solvers>
+            <solver className="Lawnmower">
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
+            </solver>
+        </solvers>
+    </problem>
+
     <problem name="Tic-Tac-Toe-Tomek" package="tictactoetomek"
              url="https://code.google.com/codejam/contest/2270488/dashboard">
         <solvers>
