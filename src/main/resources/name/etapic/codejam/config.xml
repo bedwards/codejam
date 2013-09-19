@@ -1,5 +1,17 @@
 <problems>
 
+    <problem name="Fair and Square" package="fairandsquare"
+             url="https://code.google.com/codejam/contest/2270488/dashboard#s=p2">
+        <solvers>
+            <solver className="FairAndSquare">
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large1"/>
+                <dataset name="large2"/>
+            </solver>
+        </solvers>
+    </problem>
+
     <problem name="Lawnmower" package="lawnmower"
              url="https://code.google.com/codejam/contest/2270488/dashboard#s=p1">
         <solvers>
@@ -15,16 +27,16 @@
              url="https://code.google.com/codejam/contest/2270488/dashboard">
         <solvers>
             <solver className="TicTacToeTomek">
-                <dataset name="debug" />
-                <dataset name="sample" />
-                <dataset name="small" />
-                <dataset name="large" />
+                <dataset name="debug"/>
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
             </solver>
             <solver className="ContentAnalysis">
-                <dataset name="debug" />
-                <dataset name="sample" />
-                <dataset name="small" />
-                <dataset name="large" />
+                <dataset name="debug"/>
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
             </solver>
         </solvers>
     </problem>
@@ -33,9 +45,9 @@
              url="https://code.google.com/codejam/contest/32016/dashboard">
         <solvers>
             <solver className="MinScalarProduct">
-                <dataset name="sample" />
-                <dataset name="small" />
-                <dataset name="large" />
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
             </solver>
         </solvers>
     </problem>
@@ -44,90 +56,90 @@
              url="https://code.google.com/codejam/contest/189252/dashboard#s=p0">
         <solvers>
             <solver className="AllYourBase">
-                <dataset name="sample" />
-                <dataset name="small" />
-                <dataset name="large" />
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
             </solver>
         </solvers>
     </problem>
 
-	<problem name="Reverse Words" package="reversewords"
-		url="https://code.google.com/codejam/contest/351101/dashboard#s=p1">
-		<solvers>
-			<solver className="ReverseWords">
-				<dataset name="small" />
-				<dataset name="large" />
-			</solver>
-		</solvers>
-	</problem>
+    <problem name="Reverse Words" package="reversewords"
+             url="https://code.google.com/codejam/contest/351101/dashboard#s=p1">
+        <solvers>
+            <solver className="ReverseWords">
+                <dataset name="small"/>
+                <dataset name="large"/>
+            </solver>
+        </solvers>
+    </problem>
 
-	<problem name="Store Credit" package="storecredit"
-		url="https://code.google.com/codejam/contest/351101/dashboard#s=p0">
-		<solvers>
-			<solver className="StoreCredit">
-				<dataset name="small" />
-				<dataset name="large" />
-			</solver>
-		</solvers>
-	</problem>
+    <problem name="Store Credit" package="storecredit"
+             url="https://code.google.com/codejam/contest/351101/dashboard#s=p0">
+        <solvers>
+            <solver className="StoreCredit">
+                <dataset name="small"/>
+                <dataset name="large"/>
+            </solver>
+        </solvers>
+    </problem>
 
-	<problem name="T9 Spelling" package="t9spelling"
-		url="https://code.google.com/codejam/contest/351101/dashboard#s=p2">
-		<solvers>
-			<solver className="T9Spelling">
-				<dataset name="small" />
-				<dataset name="large" />
-			</solver>
-		</solvers>
-	</problem>
+    <problem name="T9 Spelling" package="t9spelling"
+             url="https://code.google.com/codejam/contest/351101/dashboard#s=p2">
+        <solvers>
+            <solver className="T9Spelling">
+                <dataset name="small"/>
+                <dataset name="large"/>
+            </solver>
+        </solvers>
+    </problem>
 
-	<problem name="File Fix-it" package="filefixit"
-		url="https://code.google.com/codejam/contest/635101/dashboard#s=p0">
-		<solvers>
-			<solver className="FileFixit">
-				<dataset name="sample" />
-				<dataset name="small" />
-				<dataset name="large" />
-			</solver>
-		</solvers>
-	</problem>
+    <problem name="File Fix-it" package="filefixit"
+             url="https://code.google.com/codejam/contest/635101/dashboard#s=p0">
+        <solvers>
+            <solver className="FileFixit">
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
+            </solver>
+        </solvers>
+    </problem>
 
-	<problem name="Rope Intranet" package="ropeintranet"
-		url="https://code.google.com/codejam/contest/619102/dashboard#s=p0">
-		<solvers>
-			<solver className="RopeIntranet">
-				<dataset name="sample" />
-				<dataset name="small" />
-				<dataset name="large" />
-			</solver>
-		</solvers>
-	</problem>
+    <problem name="Rope Intranet" package="ropeintranet"
+             url="https://code.google.com/codejam/contest/619102/dashboard#s=p0">
+        <solvers>
+            <solver className="RopeIntranet">
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
+            </solver>
+        </solvers>
+    </problem>
 
-	<problem name="Milkshakes" package="milkshakes"
-		url="https://code.google.com/codejam/contest/32016/dashboard#s=p1">
-		<solvers>
-			<solver className="Milkshakes">
-				<dataset name="sample" />
-				<dataset name="small" />
-				<dataset name="large" />
-			</solver>
-			<solver className="MilkshakesNPComplete">
-				<dataset name="sample" />
-				<dataset name="small" />
-				<dataset name="large" />
-			</solver>
-		</solvers>
-	</problem>
+    <problem name="Milkshakes" package="milkshakes"
+             url="https://code.google.com/codejam/contest/32016/dashboard#s=p1">
+        <solvers>
+            <solver className="Milkshakes">
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
+            </solver>
+            <solver className="MilkshakesNPComplete">
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
+            </solver>
+        </solvers>
+    </problem>
 
-	<problem name="Rotate" package="rotate"
-		url="https://code.google.com/codejam/contest/544101/dashboard#s=p0">
-		<solvers>
-			<solver className="Rotate">
-				<dataset name="sample" />
-				<dataset name="small" />
-				<dataset name="large" />
-			</solver>
-		</solvers>
-	</problem>
+    <problem name="Rotate" package="rotate"
+             url="https://code.google.com/codejam/contest/544101/dashboard#s=p0">
+        <solvers>
+            <solver className="Rotate">
+                <dataset name="sample"/>
+                <dataset name="small"/>
+                <dataset name="large"/>
+            </solver>
+        </solvers>
+    </problem>
 
 </problems>

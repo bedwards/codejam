@@ -21,8 +21,8 @@ import static java.lang.System.nanoTime;
 
 final class CodeJam {
 
-	private static final long STRATEGY_TIMEOUT_SECONDS = 5;
-	private final List<ProblemConfig> problemConfigs;
+    private static final long STRATEGY_TIMEOUT_SECONDS = 10;
+    private final List<ProblemConfig> problemConfigs;
 
 	CodeJam(final List<ProblemConfig> problemConfigs) {
 		this.problemConfigs = problemConfigs;
@@ -56,11 +56,11 @@ final class CodeJam {
                                                     final BufferedReader inReader, final BufferedWriter outWriter) {
         try {
             final int caseCount = Integer.parseInt(inReader.readLine());
-            System.out.println(String.format("caseCount=%s", caseCount));
+            // System.out.println(String.format("caseCount=%s", caseCount));
             final List<String> outLines = new ArrayList<>(caseCount);
             final List<Measurement> measurements = new ArrayList<>();
             for (int caseIndex = 0; caseIndex < caseCount; caseIndex++) {
-                System.out.println(String.format("caseIndex=%s", caseIndex));
+                // System.out.println(String.format("caseIndex=%s", caseIndex));
                 Future<Measurement> future = executor.submit(new Callable<Measurement>() {
                     @Override
                     public Measurement call() throws Exception {
@@ -82,7 +82,7 @@ final class CodeJam {
             measurements.add(measurement);
                 final String caseOutput = String.format("Case #%s: %s", caseIndex + 1, measurement.text);
                 outLines.add(caseOutput);
-            System.out.println(caseOutput);
+            // System.out.println(caseOutput);
             outWriter.write(caseOutput);
             outWriter.newLine();
         }
@@ -171,7 +171,7 @@ final class CodeJam {
                                 throw e;
                             }
                         }
-                        if (Arrays.asList("small", "large").contains(datasetName)) {
+                        if (Arrays.asList("small", "large", "large1", "large2").contains(datasetName)) {
                             renderGraph(solverConfig.getClassName(), series);
                         }
                     }
