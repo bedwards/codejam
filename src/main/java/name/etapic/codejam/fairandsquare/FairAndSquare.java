@@ -6,8 +6,6 @@ import name.etapic.codejam.Solution;
 import java.io.BufferedReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,11 +33,11 @@ public final class FairAndSquare implements ProblemSolver {
 
         // From the content analysis (https://code.google.com/codejam/contest/2270488/dashboard#s=a&a=2)
         // Let X be Fair and Square, and let its square root be Y.
-        final List<List<Byte>> Ys = new ArrayList<>();
+        final List<StringBuilder> Ys = new ArrayList<>();
 
-        Ys.add(Arrays.asList((byte) 1));
-        Ys.add(Arrays.asList((byte) 2));
-        Ys.add(Arrays.asList((byte) 3));
+        Ys.add(new StringBuilder("1"));
+        Ys.add(new StringBuilder("2"));
+        Ys.add(new StringBuilder("3"));
         final int maxLength = sqrt(BigInteger.TEN.pow(exponent)).toString().length();
 
         // From the content analysis (https://code.google.com/codejam/contest/2270488/dashboard#s=a&a=2)
@@ -49,59 +47,56 @@ public final class FairAndSquare implements ProblemSolver {
         final int maxSumOfSquares = 9;
 
         for (int length = 2; length <= maxLength; length++) {
-            List<Byte> r = new ArrayList<>(Collections.nCopies((length + 1) / 2, (byte) 0));
-            final List<List<Byte>> results = generateYsOfLength(0, length, r, maxSumOfSquares);
-            for (List<Byte> result : results) {
-                Ys.add(new ArrayList<>(result));
+            StringBuilder r = new StringBuilder(new String(new char[(length + 1) / 2]));
+            final List<StringBuilder> results = generateYsOfLength(0, length, r, maxSumOfSquares);
+            for (StringBuilder result : results) {
+                Ys.add(new StringBuilder(result));
                 if ((length & 1) == 0) {
-                    getLast(Ys).add(getLast(result));
+                    getLast(Ys).append(getLast(result));
                 }
-                for (int i = result.size() - 2; i >= 0; i--) {
-                    getLast(Ys).add(result.get(i));
+                for (int i = result.length() - 2; i >= 0; i--) {
+                    getLast(Ys).append(result.charAt(i));
                 }
             }
         }
         final List<BigInteger> fairAndSquares = new ArrayList<>(Ys.size());
-        for (List<Byte> bytes : Ys) {
-            final StringBuilder val = new StringBuilder();
-            for (byte b : bytes) {
-                val.append(b);
-            }
-            fairAndSquares.add(new BigInteger(val.toString()).pow(2));
+        for (StringBuilder Y : Ys) {
+            fairAndSquares.add(new BigInteger(Y.toString()).pow(2));
         }
         return fairAndSquares;
     }
 
-    private static boolean isMiddleDigit(final int p, final int length) {
-        return p * 2 + 1 == length;
+    private static boolean isMiddleDigit(final int offset, final int length) {
+        return offset * 2 + 1 == length;
     }
 
     /**
      * Ported from netkuba's C++ solution and refactored.
      * https://code.google.com/codejam/contest/2270488/scoreboard#vf=1
      */
-    private static List<List<Byte>> generateYsOfLength(final int position, final int length, final List<Byte> result,
-                                                       final int remainingSumOfSquares) {
+    private static List<StringBuilder> generateYsOfLength(final int offset, final int length,
+                                                          final StringBuilder result,
+                                                          final int remainingSumOfSquares) {
 
-        // values at position 0 can be 1 or 2. values at other positions can be 0, 1 or 2.
-        byte i = (byte) (!isMiddleDigit(position, length) && position == 0 ? 1 : 0);
+        // values at offset 0 can be 1 or 2. values at other positions can be 0, 1 or 2.
+        int i = (!isMiddleDigit(offset, length) && offset == 0 ? 1 : 0);
 
-        final List<List<Byte>> results = new ArrayList<>();
+        final List<StringBuilder> results = new ArrayList<>();
         while (true) {
 
             // middle digit only shows up once, other digits show up twice, so contribution to sum of squares is
             // adjusted
-            final int newRemainingSumOfSquares = remainingSumOfSquares - (isMiddleDigit(position,
+            final int newRemainingSumOfSquares = remainingSumOfSquares - (isMiddleDigit(offset,
                     length) ? i * i : i * i * 2);
 
             if (newRemainingSumOfSquares < 0) {
                 break;
             }
-            result.set(position, i);
-            if ((position + 1) * 2 + 1 <= length) {
-                results.addAll(generateYsOfLength(position + 1, length, result, newRemainingSumOfSquares));
+            result.replace(offset, offset + 1, Integer.toString(i));
+            if ((offset + 1) * 2 + 1 <= length) {
+                results.addAll(generateYsOfLength(offset + 1, length, result, newRemainingSumOfSquares));
             } else {
-                results.add(new ArrayList<>(result));
+                results.add(new StringBuilder(result));
             }
             i++;
         }
@@ -110,6 +105,10 @@ public final class FairAndSquare implements ProblemSolver {
 
     private static <T> T getLast(final List<T> xs) {
         return xs.get(xs.size() - 1);
+    }
+
+    private static char getLast(final StringBuilder builder) {
+        return builder.charAt(builder.length() - 1);
     }
 
     /**
