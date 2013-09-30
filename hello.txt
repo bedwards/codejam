@@ -1,2 +1,8 @@
 Hello world
 this will cause a merge conflict
+Hello world in git traing #1
+Hello world another one
+1
+2
+2
+3
