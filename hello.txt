@@ -1,1 +1,2 @@
 Hello world
+this will cause a merge conflict
