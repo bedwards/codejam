@@ -26,6 +26,22 @@ public class Foo {
         return left + right;
     }
 
+    public int subtract() {
+        return left - right;
+    }
+
+    public int multiply() {
+        return left * right;
+    }
+
+    public int divide() {
+        return left / right;
+    }
+
+    public double power() {
+        return Math.pow(left, right);
+    }
+
     public String getColor() {
         return color;
     }

@@ -29,4 +29,24 @@ public class FooTest {
     public void testAdd() throws Exception {
         assertEquals(3, foo.add());
     }
+
+    @Test
+    public void testSubtract() throws Exception {
+        assertEquals(-1, foo.subtract());
+    }
+
+    @Test
+    public void testMultiply() throws Exception {
+        assertEquals(2, foo.multiply());
+    }
+
+    @Test
+    public void testDivide() throws Exception {
+        assertEquals(0, foo.divide());
+    }
+
+    @Test
+    public void testPower() throws Exception {
+        assertEquals(1, Math.round(foo.power()));
+    }
 }
