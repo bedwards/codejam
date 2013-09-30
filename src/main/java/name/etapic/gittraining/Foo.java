@@ -6,13 +6,24 @@ public class Foo {
     private int left;
     private int right;
 
-    Foo() {
+    /**
+     * This is the no-arg constructor
+     */
+    public Foo() {
 
     }
 
-    Foo(final int left, final int right) {
+    public Foo(final int left, final int right) {
         this.left = left;
         this.right = right;
+    }
+
+    /**
+     * this adds left and right
+     * @return sum of left and right
+     */
+    public int add() {
+        return left + right;
     }
 
     public String getColor() {
