@@ -1,21 +1,32 @@
 package name.etapic.gittraining;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 public class FooTest {
 
     private Foo foo;
 
-    @org.junit.Before
+    @Before
     public void setUp() throws Exception {
         foo = new Foo(1, 2);
     }
 
-    @org.junit.After
+    @After
     public void tearDown() throws Exception {
         foo = null;
     }
 
-    @org.junit.Test
+    @Test
     public void testGetRight() throws Exception {
-        assertEqual(2, foo.getRight());
+        assertEquals(2, foo.getRight());
+    }
+
+    @Test
+    public void testAdd() throws Exception {
+        assertEquals(3, foo.add());
     }
 }
